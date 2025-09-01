@@ -1,0 +1,43 @@
+
+---
+
+## 📄 `job_alerts.py`
+
+(Filtered version we wrote earlier with resume preferences ✅)  
+[Already shared above — paste that full code here.]
+
+---
+
+## 📄 `.github/workflows/job_alerts.yml`
+
+```yaml
+name: Daily Job Alerts
+
+on:
+  schedule:
+    - cron: "0 6 * * *"   # Runs daily at 6 AM UTC
+  workflow_dispatch:       # Manual run option
+
+jobs:
+  run-job-alerts:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+
+    - name: Install dependencies
+      run: pip install requests
+
+    - name: Run job alerts script
+      env:
+        EMAIL_USER: ${{ secrets.EMAIL_USER }}
+        EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+        TO_EMAIL:   ${{ secrets.TO_EMAIL }}
+        SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
+      run: python job_alerts.py
